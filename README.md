@@ -53,6 +53,10 @@ Those which visualize are:
 
     . OSARI_visualize()
     . STOPIT_visualize()
+    
+An example of visualized data using BASTD:
+
+![alt text](https://i.imgur.com/TRXcCYx.jpg)
 
 ### Context independence violations
 
