@@ -54,6 +54,8 @@ Those which visualize are:
     . OSARI_visualize()
     . STOPIT_visualize()
 
+### Context independence violations
 
-Please report any issues on the github page 
+There may be violations of context independence in the data collected with OSARI. If you have reason to suspect this is the case, we recommend using the Dynamic Models of Choice (DMC) R system, which can be accessed at: osf.io/tw46u/. Please see the manuscript for further information. 
 
+## Thanks for using BASTD
