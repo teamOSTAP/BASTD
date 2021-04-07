@@ -1,5 +1,5 @@
-# BASTD
-Batch Analysis of Stop-signal Task Data (BASTD) is a package with a series of functions used to analyze and visualize stop-signal task (SST) data.
+# Batch Analysis of Stop-signal Task Data (BASTD)
+BASTD is a package with a series of functions used to analyze and visualize stop-signal task (SST) data.
 
 Written by Jason L He, Rohan Puri, Rebecca J Hirst
 
