@@ -18,10 +18,11 @@ BASTD was created to comprehensively batch analyse data from standard stop-signa
 ## Getting Started
 The functions of BASTD can be separated into those which analyze and those which visualize.
 
-Those which analyze are: 
-BASTD_analyze()
-OSARI_analyze() and
-STOPIT_analyze()
+The functions which analyze data are: 
+
+    . BASTD_analyze()
+    . OSARI_analyze() and
+    . STOPIT_analyze()
 
 ### BASTD_analyze 
 
@@ -49,8 +50,9 @@ Converts data from OSARI to be compatible with BASTD_analyze. Returns analyzed d
 Converts data from STOP-IT to be compatible with BASTD_analyze. Returns analyzed data. See example-data for file structure.
 
 Those which visualize are: 
-OSARI_visualize()
-STOPIT_visualize()
+
+    . OSARI_visualize()
+    . STOPIT_visualize()
 
 
 Please report any issues on the github page 
