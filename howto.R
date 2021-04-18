@@ -17,9 +17,9 @@ OSARI_analyze(data = OSARI_data) # OSARI analyze
 OSARI_visualize(OSARI_data) # OSARI visualize
 
 # Analyze all examples ----------------------------------------------------
-# OSARI_analyzed_all works by creating a folder called 'analyzed' in the working directory where you specify (within the brackets of the function)
-# OSARI_visualized all is exactyl the same, except the folder is called 'visualized'
-# These scripts work by looking for all the files in that folder with the term 'OSARI' and then analyzes or visualizes those data
+# OSARI_analyzed_all create a folder called 'analyzed' in the specified working directory
+# OSARI_visualized create a folder called 'visualized' in the specified working directory
+# These scripts work by looking for all the files in that folder with the term 'OSARI' and then analyze or visualize those data
 OSARI_analyze_all(here("example-data")) # analyzed data will be saved as a .csv file
 OSARI_visualize_all(here("example-data")) # visualized data will be saved as a .pdf file
 
