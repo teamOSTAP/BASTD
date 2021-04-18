@@ -18,17 +18,13 @@ BASTD was created to comprehensively batch analyse data from standard stop-signa
 ## Getting Started
 The functions of BASTD can be separated into those which analyze and those which visualize.
 
+## Analyze functions
 The functions which analyze data are: 
 	* BASTD_analyze()
     * OSARI_analyze() and
     * STOPIT_analyze()
 
-Those which visualize are: 
-	* OSARI_visualize()
-    * STOPIT_visualize()
-
-### BASTD_analyze 
-
+### BASTD_analyze
 Requires input of data collected from the SST. Given that different versions of the SST have different column names, it is the job of the user to ensure that column names line up with the column names used by BASTD_analyze. 
 
 The column names are: (ID, Block, Trial, Stimulus, Signal, Correct, Response, RT, RE, SSD, TrialType)
@@ -46,18 +42,22 @@ TrialType (Optional): *only relevant for data from OSARI*
 
 Provided the column names are consistent with the above, BASTD_analyze should be able to analyze any dataset from a SST. 
 
-### OSARI_analyze 
+### OSARI_analyze
 Converts data from OSARI to be compatible with BASTD_analyze. Returns analyzed data. See example-data for file structure.
 
 ### STOPIT_analyze
 Converts data from STOP-IT to be compatible with BASTD_analyze. Returns analyzed data. See example-data for file structure.
+
+## Visualize functions
+The functions which visualize data are: 
+	* OSARI_visualize()
+    * STOPIT_visualize()
 
 An example of visualized data using BASTD:
 
 ![alt text](https://i.imgur.com/TRXcCYx.jpg)
 
 ### Context independence violations
-
-There may be violations of context independence in the data collected with OSARI. If you have reason to suspect this is the case, we recommend using the Dynamic Models of Choice (DMC) R system, which can be accessed at: osf.io/tw46u/. Please see the manuscript for further information. 
+There may be violations of context independence in the data collected with OSARI. If you have reason to suspect this is the case, we recommend using the [Dynamic Models of Choice (DMC) R system](osf.io/tw46u/). Please see the manuscript for further information. 
 
 ## Thanks for using BASTD
