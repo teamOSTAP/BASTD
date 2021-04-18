@@ -13,16 +13,19 @@ He, J. L , Hirst, R. J , Puri, R.,Coxon, J., Byblow, W., Hinder, M., Skippen, P.
 
 
 ## About
-BASTD was created to comprehensively batch analyse data from standard stop-signal paradigms. It was primarily developed to analyse data from OSTAP's OSARI, though it can be adapted to analyse data from other stop-signal paradigms. If you need help with implementing BASTD, please email the team at: opensourceTAP@gmail.com
+BASTD was created to comprehensively batch analyse data from standard stop-signal paradigms. It was primarily developed to analyse data from OSTAP's [OSARI](https://github.com/teamOSTAP/OSARI), though it can be adapted to analyse data from other stop-signal paradigms. If you need help with implementing BASTD, please email the team at: opensourceTAP@gmail.com
 
 ## Getting Started
 The functions of BASTD can be separated into those which analyze and those which visualize.
 
 The functions which analyze data are: 
+	* BASTD_analyze()
+    * OSARI_analyze() and
+    * STOPIT_analyze()
 
-    . BASTD_analyze()
-    . OSARI_analyze() and
-    . STOPIT_analyze()
+Those which visualize are: 
+	* OSARI_visualize()
+    * STOPIT_visualize()
 
 ### BASTD_analyze 
 
@@ -49,11 +52,6 @@ Converts data from OSARI to be compatible with BASTD_analyze. Returns analyzed d
 ### STOPIT_analyze
 Converts data from STOP-IT to be compatible with BASTD_analyze. Returns analyzed data. See example-data for file structure.
 
-Those which visualize are: 
-
-    . OSARI_visualize()
-    . STOPIT_visualize()
-    
 An example of visualized data using BASTD:
 
 ![alt text](https://i.imgur.com/TRXcCYx.jpg)
