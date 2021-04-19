@@ -1,11 +1,10 @@
 Package: BASTD
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: Analyses data produced by OSARI (open-source anticipated response inhibition) task
+Version: 1.0.0
+Author: team OSTAP
+Maintainer: The package maintainer <teamOSTAP@gmail.com>
+Description: BASTD is a R package used to analyse and visualise the data gathered by participant completion of OSARI. For help using the task, please refer to the file "howto.R".
+License: NA
 Encoding: UTF-8
 LazyData: true
