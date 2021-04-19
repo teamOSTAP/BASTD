@@ -60,7 +60,7 @@ OSARI_visualize <- function(data){
   }
 
 # analyze osari_data ------------------------------------------------------
-  analyzed_osari_data <- BASTD_analyze(converted_osari_data, 1000)
+  analyzed_osari_data <- BASTD_analyze(converted_osari_data, 1000)[[1]]
 
   #The Procedure
   number_of_blocks <- analyzed_osari_data$number_of_blocks

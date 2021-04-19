@@ -16,33 +16,27 @@
 
 BASTD_analyze <- function(data, maximum_go_trial_RT){
 
-# debugging ---------------------------------------------------------------
-  #With STOP IT
-  # example_STOP_IT_data <- "https://raw.githubusercontent.com/HeJasonL/BASTD/master/example-data/STOP-IT_raw.csv"
-  # STOP_IT_data <- read.csv(example_STOP_IT_data, header = TRUE) #read the example STOP-IT data
-  # data <- STOP_IT_data
+warning(
+"Note:
+ BASTD_analyze produces performance outcomes for go trials in three different ways
+  1. Including all go trials, regardless of accuracy
+  2. Including only accurate go trials
+  3. Including only inaccurate go trials
+  4. Including only accurate go trials with go omission errors replaced
+
+  It is recommended that users use option 4, see consensus paper:
+  https://elifesciences.org/articles/46323
+
+  For all performance outcomes use [[1]]
+  For performance outcomes with omission errors replaced use[[2]]
 
 
-  #WITH OSARI
-  # osari_data <- read.csv(here("example-data", "OSARI_raw2.txt"), header = TRUE, sep = "")
-  # ID <- "JH"
-  # Block <- osari_data$block
-  # Trial <- osari_data$trial
-  # TrialType <- osari_data$trialType
-  # Stimulus <- NA
-  # Signal <- osari_data$signal
-  # Correct <- ifelse(osari_data$signal==1 & osari_data$response == 1, 0, 2)
-  # Response <- osari_data$response
-  # RT <- suppressWarnings(as.numeric(osari_data$rt) * 1000)
-  # RE <- NA
-  # SSD <- suppressWarnings(as.numeric(osari_data$ssd) * 1000)
-  # converted_osari_data <- as.data.frame(cbind(ID, Block, Trial, Stimulus, Signal, Correct, Response, RT, RE, SSD, TrialType)) #create the dataframe used for BASTD_analyze
-  #
-  #  data <- converted_osari_data
-  #  maximum_go_trial_RT <- 1000
+Additional Note:
+ We recommend users check for violations of context independence (CI) before using the SSRTs estimated using BASTD.
+ To check for violations of CI, and to estimate SSRTs when CI is violated, see: osf.io/tw46u/
 
-
-
+"
+  )
 
 # setup -------------------------------------------------------------------
 data <- data #assign data to 'data'
@@ -54,24 +48,24 @@ id_number <- data$ID[[1]] #store the participant id number
 # procedure characteristics ------------------------------------------------
 
 # procedure characteristics, assuming that the data is STOP-IT data
-  #note, below, it is also assumed that there are equal go/stop trialas across blocks
-number_of_blocks <- length(unique(data$Block))
+  #note, below, it is also assumed that there are equal go/stop trials across blocks
+number_of_blocks <- length(unique(data$Block)) #number of unique blocks
 number_of_go_trials_per_block <- nrow(data[data$Signal==0 & data$Block==0,])
 number_of_stop_trials_per_block <- nrow(data[data$Signal==1 & data$Block==0,])
-
 
 # procedure characteristics if data is from OSARI
 if("testBlocks" %in% data$TrialType){ #A way to check whether the data is OSARI data is to see whether testBlocks exists
   number_of_blocks <- length(unique(data$TrialType))
-  number_of_go_trials_per_block <- nrow(data[data$Signal==0 & data$Block==0 & data$TrialType=="testBlocks",])
-  number_of_stop_trials_per_block <- nrow(data[data$Signal==1  & data$Block==0 & data$TrialType=="testBlocks",])
+  number_of_go_trials_per_block <- nrow(data[data$Signal==0 & data$Block==0 & data$TrialType=="testBlocks",]) #number of go trials in each test block (assuming that testBlocks are identical)
+  number_of_stop_trials_per_block <- nrow(data[data$Signal==1  & data$Block==0 & data$TrialType=="testBlocks",]) #as per above, but for stop trials
 }
 
-procedure_characteristics <- cbind(number_of_blocks, number_of_go_trials_per_block, number_of_stop_trials_per_block)
-#To add: Tracking procedure (fixed/random, start value, step size, minimum/maximum value)
+procedure_characteristics <- cbind(number_of_blocks,
+                                   number_of_go_trials_per_block,
+                                   number_of_stop_trials_per_block
+                                   )
 
 # Analyze performance  ----------------------------------------------------
-
 # Standard Go trial performance outcomes ---------------------------------
 
 #Go Performance
@@ -99,19 +93,26 @@ suppressWarnings(all_go_trials_omissions_replaced_with_max_duration <- all_go_tr
 suppressWarnings(all_go_trials_omissions_replaced_with_max_duration$RT[all_go_trials_omissions_replaced_with_max_duration$Response==0] <- maximum_go_trial_RT) #replace any omission errors with the maximum go trial RT
 suppressWarnings(all_go_trials_omissions_replaced_with_max_duration$Correct[all_go_trials_omissions_replaced_with_max_duration$Response==0] <- 2) #replace any omission errors that are deemed to be inaccurate to be accurate
 
-go_trial_RT_mean_omissions_replaced <- mean(as.numeric(as.character(all_go_trials_omissions_replaced_with_max_duration$RT))) #RT with omission errors replaced as maximum go trial RT (using all trials regardless of accuracy)
-go_trial_RT_sd_omissions_replaced <- sd(as.numeric(as.character(all_go_trials_omissions_replaced_with_max_duration$RT))) #RT with omission errors replaced as maximum go trial RT (using all trials regardless of accuracy)
+go_trial_RT_mean_omissions_replaced_with_max_duration <- mean(as.numeric(as.character(all_go_trials_omissions_replaced_with_max_duration$RT))) #RT with omission errors replaced as maximum go trial RT (using all trials regardless of accuracy)
+go_trial_RT_sd_omissions_replaced_with_max_duration <- sd(as.numeric(as.character(all_go_trials_omissions_replaced_with_max_duration$RT))) #RT with omission errors replaced as maximum go trial RT (using all trials regardless of accuracy)
 
-accurate_go_trial_RT_mean_omissions_replaced <- mean(as.numeric(as.character(all_go_trials_omissions_replaced_with_max_duration$RT[all_go_trials_omissions_replaced_with_max_duration$Correct==2]))) #RT with omission errors replaced as maximum go trial RT (using only accurate trials)
-accurate_go_trial_RT_sd_omissions_replaced <- sd(as.numeric(as.character(all_go_trials_omissions_replaced_with_max_duration$RT[all_go_trials_omissions_replaced_with_max_duration$Correct==2]))) #RT with omission errors replaced as maximum go trial RT (using only accurate trials)
+accurate_go_trial_RT_mean_omissions_replaced_with_max_duration <- mean(as.numeric(as.character(all_go_trials_omissions_replaced_with_max_duration$RT[all_go_trials_omissions_replaced_with_max_duration$Correct==2]))) #RT with omission errors replaced as maximum go trial RT (using only accurate trials)
+accurate_go_trial_RT_sd_omissions_replaced_with_max_duration <- sd(as.numeric(as.character(all_go_trials_omissions_replaced_with_max_duration$RT[all_go_trials_omissions_replaced_with_max_duration$Correct==2]))) #RT with omission errors replaced as maximum go trial RT (using only accurate trials)
 
 #combine all the go trial performance data
-go_trial_performance_outcomes <- cbind(go_trial_accuracy, omission_error,
-                                       go_trial_RT_mean, go_trial_RT_sd,
-                                       accurate_go_trial_RT_mean, accurate_go_trial_RT_sd,
-                                       inaccurate_go_trial_RT_mean, inaccurate_go_trial_RT_sd,
-                                       go_trial_RT_mean_omissions_replaced, go_trial_RT_sd_omissions_replaced,
-                                       accurate_go_trial_RT_mean_omissions_replaced, accurate_go_trial_RT_sd_omissions_replaced)
+go_trial_performance_outcomes <- cbind(go_trial_accuracy,
+                                       omission_error,
+                                       go_trial_RT_mean,
+                                       go_trial_RT_sd,
+                                       accurate_go_trial_RT_mean,
+                                       accurate_go_trial_RT_sd,
+                                       inaccurate_go_trial_RT_mean,
+                                       inaccurate_go_trial_RT_sd,
+                                       go_trial_RT_mean_omissions_replaced_with_max_duration,
+                                       go_trial_RT_sd_omissions_replaced_with_max_duration,
+                                       accurate_go_trial_RT_mean_omissions_replaced_with_max_duration,
+                                       accurate_go_trial_RT_sd_omissions_replaced_with_max_duration
+                                       )
 
 # Standard Stop trial performance outcomes --------------------------------
 
@@ -122,29 +123,17 @@ n_of_stop_trials <- nrow(all_stop_trials) #number of go trials
 #Accuracy
 stop_trial_accuracy <- (nrow(all_stop_trials[all_stop_trials$Correct==2,]))/(nrow(all_stop_trials)) * 100
 
-#Failed RTs
+#Failed Stop RTs
 failed_stop_RT_mean <- mean(as.numeric(as.character(all_stop_trials$RT[all_stop_trials$Correct==0])))
 failed_stop_RT_sd <- sd(as.numeric(as.character(all_stop_trials$RT[all_stop_trials$Correct==0])))
 
-# # Failed RTs by SSD (W.I.P)
-#unique_ssds <- unique(all_stop_trials$SSD[all_stop_trials$Correct==0]) #list the unique ssds
-# list_for_RTs_by_ssd <- list()
-#  for(u in 1:length(unique_ssds)){
-#    current_ssd_subset <- all_stop_trials[all_stop_trials$SSD == unique_ssds[u],]
-#    mean <- mean(as.numeric((as.character(current_ssd_subset$RT))))
-#    ssd <- as.character(unique_ssds[[u]])
-#    failed_stop_RT_mean_at_current_ssd <- as.data.frame(cbind(mean, ssd))
-#
-#    list_for_RTs_by_ssd[[u]] <- failed_stop_RT_mean_at_current_ssd
-#    # assign(paste0("failed_stop_RT_", ssd, "_mean"), mean)
-#  }
-#
-# list_for_RTs_by_ssd
-
-stop_trial_performance_outcomes <- cbind(stop_trial_accuracy, failed_stop_RT_mean, failed_stop_RT_sd)
+stop_trial_performance_outcomes <- cbind(stop_trial_accuracy,
+                                         failed_stop_RT_mean,
+                                         failed_stop_RT_sd)
 
 # Ex-Gaussian parameters of Go RT distribution  -------------------------
-
+#Estimation of ex-gaussian parameters for the Go RT distribution using the retimes package
+#Note that the retimes package is now archived, and has to be installed
 #Go trial RT irrespective of accuracy
 exGaus_go_trial_RT <- retimes::mexgauss(as.numeric(as.character(all_go_trials$RT)))
 mu_go <- exGaus_go_trial_RT[[1]]
@@ -190,10 +179,19 @@ if(length(inaccurate_go_trial_RTs) > 1){
   tau_inaccurate_go <- NA
 }
 
-exGaussian_go_outcomes <- cbind(mu_go, sigma_go, tau_go,
-                                mu_accurate_go, sigma_accurate_go, tau_accurate_go,
-                                mu_inaccurate_go, sigma_inaccurate_go, tau_inaccurate_go,
-                                mu_accurate_go_omissions_replaced_with_max_duration, sigma_accurate_go_omissions_replaced_with_max_duration, tau_accurate_go_omissions_replaced_with_max_duration)
+exGaussian_go_outcomes <- cbind(mu_go,
+                                sigma_go,
+                                tau_go,
+                                mu_accurate_go,
+                                sigma_accurate_go,
+                                tau_accurate_go,
+                                mu_inaccurate_go,
+                                sigma_inaccurate_go,
+                                tau_inaccurate_go,
+                                mu_accurate_go_omissions_replaced_with_max_duration,
+                                sigma_accurate_go_omissions_replaced_with_max_duration,
+                                tau_accurate_go_omissions_replaced_with_max_duration
+                                )
 
 
 # Ex-Gaussian parameters of SSRT distribution (W.I.P) ---------------------
@@ -206,26 +204,70 @@ mean_presp <- mean(as.numeric(as.character(all_stop_trials$Correct))/2) #nb: div
 #estimating SSRTs using the mean method
 go_trial_RT_SSRT_mean_method <- go_trial_RT_mean - mean_ssd #SSRT irrespective of Go trial accuracy
 accurate_go_trial_SSRT_mean_method <- accurate_go_trial_RT_mean - mean_ssd #Accurate Go trial SSRT
-go_trial_RT_SSRT_mean_method_omissions_replaced <- go_trial_RT_mean_omissions_replaced - mean_ssd #Go trial SSRT with omissions replaced
-accurate_go_trial_SSRT_mean_method_omissions_replaced <- accurate_go_trial_RT_mean_omissions_replaced - mean_ssd #Accurate Go trial SSRT with omissions replaced
+go_trial_RT_SSRT_mean_method_omissions_replaced_with_max_duration <- go_trial_RT_mean_omissions_replaced_with_max_duration - mean_ssd #Go trial SSRT with omissions replaced
+accurate_go_trial_SSRT_mean_method_omissions_replaced_with_max_duration <- accurate_go_trial_RT_mean_omissions_replaced_with_max_duration - mean_ssd #Accurate Go trial SSRT with omissions replaced
 
 #estimating SSRTs using the integration method
 nth_all_go_RTs <- stats::quantile(as.numeric(as.character(all_go_trials$RT)), probs = mean_presp, type = 6)
 nth_correct_go_RTs <- stats::quantile(as.numeric(as.character(all_go_trials$RT[all_go_trials$Correct==2])), probs = mean_presp, type = 6)
-nth_correct_go_RTs_with_omissions_replaced <- stats::quantile(as.numeric(as.character(all_go_trials_omissions_replaced_with_max_duration$RT[all_go_trials_omissions_replaced_with_max_duration$Correct==2])), probs = mean_presp, type = 6)
+nth_correct_go_RTs_with_omissions_replaced_with_max_duration <- stats::quantile(as.numeric(as.character(all_go_trials_omissions_replaced_with_max_duration$RT[all_go_trials_omissions_replaced_with_max_duration$Correct==2])), probs = mean_presp, type = 6)
 
 all_go_SSRT_integration_method <- nth_all_go_RTs - mean_ssd #SSRT regardless of go accuracy
-correct_go_SSRT_integration_method <- nth_correct_go_RTs - mean_ssd #SSRT using only accurate go RTs
-correct_go_SSRT_omissions_replaced_integration_method <- nth_correct_go_RTs_with_omissions_replaced - mean_ssd #SSRT using only accurate go RTs with omission errors being replaced with maximum go RT
+accurate_go_SSRT_integration_method <- nth_correct_go_RTs - mean_ssd #SSRT using only accurate go RTs
+accurate_go_SSRT_omissions_replaced_integration_method <- nth_correct_go_RTs_with_omissions_replaced_with_max_duration - mean_ssd #SSRT using only accurate go RTs with omission errors being replaced with maximum go RT
 
-SSRT_outcomes <- cbind(go_trial_RT_SSRT_mean_method, accurate_go_trial_SSRT_mean_method,
-                       go_trial_RT_SSRT_mean_method_omissions_replaced, accurate_go_trial_SSRT_mean_method_omissions_replaced,
-                       all_go_SSRT_integration_method, correct_go_SSRT_integration_method, correct_go_SSRT_omissions_replaced_integration_method,
-                       mean_ssd, mean_presp)
+SSRT_outcomes <- cbind(go_trial_RT_SSRT_mean_method,
+                       accurate_go_trial_SSRT_mean_method,
+                       go_trial_RT_SSRT_mean_method_omissions_replaced_with_max_duration,
+                       accurate_go_trial_SSRT_mean_method_omissions_replaced_with_max_duration,
+                       all_go_SSRT_integration_method,
+                       accurate_go_SSRT_integration_method,
+                       accurate_go_SSRT_omissions_replaced_integration_method,
+                       mean_ssd,
+                       mean_presp
+                       )
 
-all_outcomes <- as.data.frame(cbind(id_number, procedure_characteristics, go_trial_performance_outcomes, exGaussian_go_outcomes, stop_trial_performance_outcomes, SSRT_outcomes))
+all_outcomes <- as.data.frame(cbind(id_number,
+                                    procedure_characteristics,
+                                    go_trial_performance_outcomes,
+                                    exGaussian_go_outcomes,
+                                    stop_trial_performance_outcomes,
+                                    SSRT_outcomes))
+
 row.names(all_outcomes) <- c() #clear the row name
 
+#change values to numeric and round to two decimal places
+all_outcomes[7:40] <- lapply(all_outcomes[7:40], as.numeric)
+all_outcomes[7:40] <- lapply(all_outcomes[7:40], round, 2)
+
+
+
+standard_cols <- c(
+  "id_number",
+  "number_of_blocks",
+  "number_of_go_trials_per_block",
+  "number_of_stop_trials_per_block",
+  "go_trial_accuracy",
+  "omission_error",
+  "stop_trial_accuracy",
+  "failed_stop_RT_mean",
+  "failed_stop_RT_sd",
+  "mean_ssd",
+  "mean_presp",
+  "accurate_go_trial_RT_mean_omissions_replaced_with_max_duration",
+  "accurate_go_trial_RT_sd_omissions_replaced_with_max_duration",
+  "mu_accurate_go_omissions_replaced_with_max_duration",
+  "sigma_accurate_go_omissions_replaced_with_max_duration",
+  "tau_accurate_go_omissions_replaced_with_max_duration",
+  "accurate_go_trial_SSRT_mean_method_omissions_replaced_with_max_duration",
+  "accurate_go_SSRT_omissions_replaced_integration_method"
+)
+
+standard_outcomes <- all_outcomes[standard_cols]
+
+all_outcomes <- list(all_outcomes, standard_outcomes)
+
+# return(all_outcomes)
 return(all_outcomes)
 }
 

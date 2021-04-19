@@ -34,7 +34,9 @@ example_OSARI_data <- "https://raw.githubusercontent.com/teamOSTAP/BASTD/main/ex
 OSARI_data <- read.csv(example_OSARI_data, header = TRUE, sep = "") #read the example OSARI data
 
 # OSARI analyze
-OSARI_analyze(data = OSARI_data) #OSARI analyze - produces all the values including SSRT
+OSARI_analyze(data = OSARI_data)
+OSARI_analyze(data = OSARI_data)[[1]] #Subset to all variables
+OSARI_analyze(data = OSARI_data)[[2]] #Subset to just accurate go trials with omissions replaced variables
 
 # OSARI visualize
 OSARI_visualize(data = OSARI_data)
