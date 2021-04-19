@@ -34,7 +34,7 @@ Trial <- osari_data$trial
 TrialType <- osari_data$trialType
 Stimulus <- NA
 Signal <- osari_data$signal
-Correct <- ifelse(osari_data$signal==1 & osari_data$response == 1, 0, 2)
+Correct <- osari_data$correct
 Response <- osari_data$response
 RT <- suppressWarnings(as.numeric(osari_data$rt) * 1000)
 RE <- NA
