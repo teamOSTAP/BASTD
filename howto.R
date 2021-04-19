@@ -32,8 +32,10 @@ library(BASTD) #read the package into the library
 # OSARI  ------------------------------------------------------------------
 example_OSARI_data <- "https://raw.githubusercontent.com/teamOSTAP/BASTD/main/example-data/OSARI_raw.txt"
 OSARI_data <- read.csv(example_OSARI_data, header = TRUE, sep = "") #read the example OSARI data
+
+# OSARI analyze
 OSARI_analyze(data = OSARI_data) #OSARI analyze - produces all the values including SSRT
 
-# OSARI visualized --------------------------------------------------------
+# OSARI visualize
 OSARI_visualize(data = OSARI_data)
 
