@@ -1,17 +1,5 @@
-# functions & packages ---------------------------------------------------------------
-load.packages <- function(pkg) {
-  new.pkg <- pkg[!(pkg %in% installed.packages()[ , "Package"])]
-  if (length(new.pkg)) {
-    install.packages(new.pkg, dependencies = T)
-  }
-  sapply(pkg, require, character.only = T)
-}
-
-packages <- c("tidyverse", "nlme", "ggpubr", "Hmisc", "plyr", "Rmisc", "retimes", "data.table", "lme4","multcomp",
-              "pastecs", "effects", "DataCombine", "gridExtra", "leaps", "ppcor", "ggm", "readxl", "emmeans",
-              "eeptools", "psych","weights", "here", "cowplot", "reghelper", "sjstats", "devtools", "reader")
-
-load.packages(packages)
+# Below is a working example of how OSARI_analyze and OSARI_visualize are used:
+# Author contact: jasonhe93@gmail.com
 
 #To install the retimes package, which is required for BASTD to estimate ex-gaussian parameters of response times, you will need to install 'retimes' package from the CRAN archive
 
@@ -24,18 +12,27 @@ load.packages(packages)
 #see (https://ohdsi.github.io/Hades/rSetup.html) for information about installation
 # library(retimes) #initialise retimes
 
-# BASTD tester ------------------------------------------------------------
+# Setup -------------------------------------------------------------------
 # install the latest version of the package -------------------------------
 install_github("teamOSTAP/BASTD", force = TRUE) #install latest version of BASTD from GitHub
 library(BASTD) #read the package into the library
+library(here)
 
 # OSARI  ------------------------------------------------------------------
-example_OSARI_data <- "https://raw.githubusercontent.com/teamOSTAP/BASTD/main/example-data/OSARI_raw.txt"
-OSARI_data <- read.csv(example_OSARI_data, header = TRUE, sep = "") #read the example OSARI data
+example_OSARI_data <- "https://raw.githubusercontent.com/OSTAPL/BASTD/master/example-data/OSARI_raw.txt" # read data in from GitHub
+OSARI_data <- read.csv(example_OSARI_data, header = TRUE, sep = "") # read the example STOP-IT data
+OSARI_analyze(data = OSARI_data) # OSARI analyze
+OSARI_visualize(OSARI_data) # OSARI visualize
 
-# OSARI analyze
-OSARI_analyze(data = OSARI_data) #OSARI analyze - produces all the values including SSRT
+# Analyze all examples ----------------------------------------------------
+# OSARI_analyzed_all creates a folder called 'analyzed' in the specified working directory
+# OSARI_visualized creates a folder called 'visualized' in the specified working directory
+# These scripts work by looking for all the files in that folder with the term 'OSARI' and then analyze or visualize those data
+OSARI_analyze_all(here("example-data")) # analyzed data will be saved as a .csv file
+OSARI_visualize_all(here("example-data")) # visualized data will be saved as a .pdf file
 
-# OSARI visualize
-OSARI_visualize(data = OSARI_data)
-
+# STOP-IT -----------------------------------------------------------------
+# BASTD can also be used for traditional choice reaction stop signal task performance:
+example_STOP_IT_data <- "https://raw.githubusercontent.com/OSTAP/BASTD/master/example-data/STOP-IT_raw.csv"
+STOP_IT_data <- read.csv(example_STOP_IT_data, header = TRUE) # read the example STOP-IT data
+STOPIT_analyze(data = STOP_IT_data) # STOPIT_analyze

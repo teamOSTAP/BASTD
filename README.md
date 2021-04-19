@@ -20,23 +20,23 @@ The functions of BASTD can be separated into those which analyze and those which
 
 ## Analyze functions
 The functions which analyze data are: 
-	* BASTD_analyze()
-    * OSARI_analyze() and
-    * STOPIT_analyze()
+  * `BASTD_analyze()`
+  * `OSARI_analyze()`
+  * `STOPIT_analyze()`
 
 ### BASTD_analyze
 BASTD expects recorded stop-signal data as a txt input with the column headers: ID, Block, Trial, Stimulus, Signal, Correct, Response, RT, RE, SSD, TrialType. Although originally generated for [OSARI](https://github.com/teamOSTAP/OSARI) it can be used with data output from any stop-signal task so long as data are formated in this way (data output from OSARI is formatted using `OSARI_analyze`).
 
-**ID**: Any Character or String
-**Trial**: Numeric values in increasing order and reset after every block
-**Stimulus**: 1 or 2 (for choice-reaction variants of the SST)
-**Signal**: 0 or 1 (0 meaning no signal was presenented, i.e., a Go-trial, and 1 meaning a signal was presented i.e., a Stop-trial)
-**Correct**: 0 or 2 (0 for incorrect, 2 for correct) 
-**Response**: 0 or 1 (0 for no response, 1 for a response)
-**RT**: A numerical value for RT in ms (e.g., 300 ms)
-**RE**: *Not currently implemented*
-**SSD**: A numerical value for Stop-signal delay in ms (e.g., 250 ms)
-**TrialType (Optional)**: *only relevant for data from OSARI*
+  * `ID`: Any Character or String
+  * `Trial`: Numeric values in increasing order and reset after every block
+  * `Stimulus`: 1 or 2 (for choice-reaction variants of the SST)
+  * `Signal`: 0 or 1 (0 meaning no signal was presenented, i.e., a Go-trial, and 1 meaning a signal was presented i.e., a Stop-trial)
+  * `Correct`: 0 or 2 (0 for incorrect, 2 for correct) 
+  * `Response`: 0 or 1 (0 for no response, 1 for a response)
+  * `RT`: A numerical value for RT in ms (e.g., 300 ms)
+  * `RE`: *Not currently implemented*
+  * `SSD`: A numerical value for Stop-signal delay in ms (e.g., 250 ms)
+  * `TrialType (Optional)`: *only relevant for data from OSARI*
 
 Provided the column names are consistent with the above, BASTD_analyze should be able to analyze any dataset from a SST. 
 
@@ -48,8 +48,8 @@ Converts data from STOP-IT to be compatible with BASTD_analyze. Returns analyzed
 
 ## Visualize functions
 The functions which visualize data are: 
-	* OSARI_visualize()
-    * STOPIT_visualize()
+  * `OSARI_visualize()`
+  * `STOPIT_visualize()`
 
 An example of visualized data using BASTD:
 
