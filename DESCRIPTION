@@ -1,10 +1,10 @@
 Package: BASTD
 Type: Package
-Title: Analyse Stop Signal Task Data
-Version: 1.3.1093
-Author: Jason L He
-Maintainer: The OSTAP team  <opensourceTAP@gmail.com>
-Description: BASTD was created to comprehensively batch analyse data from standard stop-signal paradigms. It was primarily developed to analyse data from OSTAP's OSARI, though it can be adapted to analyse data from other stop-signal paradigms. 
-License: What license is it under?
+Title: Analyses data produced by OSARI (open-source anticipated response inhibition) task
+Version: 1.0.0
+Author: team OSTAP
+Maintainer: The package maintainer <teamOSTAP@gmail.com>
+Description: BASTD is a R package used to analyse and visualise the data gathered by participant completion of OSARI. For help using the task, please refer to the file "howto.R".
+License: NA
 Encoding: UTF-8
 LazyData: true
