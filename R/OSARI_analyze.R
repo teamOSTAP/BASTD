@@ -14,37 +14,31 @@
 #' @export
 
 OSARI_analyze <- function(data){
-
-# debugging ---------------------------------------------------------------
-
-  # example_OSARI_data <- "https://raw.githubusercontent.com/HeJasonL/BASTD/master/example-data/OSARI_raw.txt"
-  # data <- read.csv(example_OSARI_data, header = TRUE, sep = "") #read the example STOP-IT data
-  # data <- read.csv(here("example-data", "OSARI_raw2.txt"), header = TRUE, sep = "")
-
   data <- OSARI_data
-
-
-# setup -------------------------------------------------------------------
-osari_data <- data
-
-# Convert the readout to universal columns names and values ---------------
-ID <- "JH"
-Block <- osari_data$block
-Trial <- osari_data$trial
-TrialType <- osari_data$trialType
-Stimulus <- NA
-Signal <- osari_data$signal
-Correct <- osari_data$correct
-Response <- osari_data$response
-RT <- suppressWarnings(as.numeric(osari_data$rt) * 1000)
-RE <- NA
-SSD <- suppressWarnings(as.numeric(osari_data$ssd) * 1000)
-
-converted_osari_data <- as.data.frame(cbind(ID, Block, Trial, Stimulus, Signal, Correct, Response, RT, RE, SSD, TrialType)) #create the dataframe used for BASTD_analyze
-analyzed_osari_data <- BASTD_analyze(converted_osari_data, 1000) #run the converted_osari_data through BASTD_analyze
-
-return(analyzed_osari_data)
-}
+  
+  # setup -------------------------------------------------------------------
+  osari_data <- data
+  
+  # Convert the readout to universal columns names and values ---------------
+  ID <- "JH"
+  Block <- osari_data$block
+  Trial <- osari_data$trial
+  TrialType <- osari_data$trialType
+  Stimulus <- NA
+  Signal <- osari_data$signal
+  Correct <- osari_data$correct
+  Response <- osari_data$response
+  RT <- suppressWarnings(as.numeric(osari_data$rt) * 1000)
+  RE <- NA
+  SSD <- suppressWarnings(as.numeric(osari_data$ssd) * 1000)
+  
+  converted_osari_data <- as.data.frame(cbind(ID, Block, Trial, Stimulus, 
+                                              Signal, Correct, Response, RT,
+                                              RE, SSD, TrialType)) #create the dataframe used for BASTD_analyze
+  analyzed_osari_data <- BASTD_analyze(converted_osari_data, 1000) #run the converted_osari_data through BASTD_analyze
+  
+  return(analyzed_osari_data)
+  }
 
 
 
