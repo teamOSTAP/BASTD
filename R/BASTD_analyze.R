@@ -246,19 +246,20 @@ if(length(inaccurate_go_trial_RTs) > 1){
 
 }
 
-exGaussian_go_outcomes <- cbind(mu_go,
-                                sigma_go,
-                                tau_go,
-                                mu_accurate_go,
-                                sigma_accurate_go,
-                                tau_accurate_go,
-                                mu_inaccurate_go,
-                                sigma_inaccurate_go,
-                                tau_inaccurate_go,
-                                mu_accurate_go_omissions_replaced_with_max_duration,
-                                sigma_accurate_go_omissions_replaced_with_max_duration,
-                                tau_accurate_go_omissions_replaced_with_max_duration
-                                )
+exGaussian_go_outcomes <- cbind(
+  mu_go,
+  sigma_go,
+  tau_go,
+  mu_accurate_go,
+  sigma_accurate_go,
+  tau_accurate_go,
+  mu_inaccurate_go,
+  sigma_inaccurate_go,
+  tau_inaccurate_go,
+  mu_accurate_go_omissions_replaced_with_max_duration,
+  sigma_accurate_go_omissions_replaced_with_max_duration,
+  tau_accurate_go_omissions_replaced_with_max_duration
+  )
 
 
 # Ex-Gaussian parameters of SSRT distribution (W.I.P) ---------------------
