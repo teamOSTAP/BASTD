@@ -37,4 +37,59 @@ BASTD_analyze(data = STOP_IT_data, task = "STOP-IT")[[2]] #Subset to just accura
 BASTD_visualize(data = STOP_IT_data, task = "STOP-IT") #Visualize STOP-IT data
 
 
+# Batch analysis ----------------------------------------------------------
+#Below is an example of a for loop which can be used to batch analyze stop-signal task data
 
+sst_files <- list.files(here("example-data"), pattern = "_") #list the stop-signal task files in your working directory
+
+#create lists external to the for loop that can store the analyzed and visualized data
+analyzed_sst_data <- list()
+visualized_sst_data <- list()
+
+suppressWarnings( #suppress warnings for the for loop
+for(f in sst_files){
+
+  #print the participant file being analyzed and visualized
+  print(paste("Now analyzing and visualizing participant file:", f))
+
+  #if csv file:
+  if(grepl(".csv", f)){
+    data <- read.csv(here("example-data", f), header = TRUE, sep = ",")
+  }
+
+  #If txt file
+  if(grepl(".txt", f)){
+    data <- read.csv(here("example-data", f), header = TRUE, sep = "\t")
+  }
+
+  #if filename contains OSARI
+  if(grepl("OSARI", f)){
+    analyzed <- BASTD_analyze(data = data, task = "OSARI")[[1]]
+    visualized <- BASTD_visualize(data = data, task = "OSARI") #Visualize STOP-IT data
+  }
+
+  #if filename contains STOP-IT
+  if(grepl("STOP-IT", f)){
+    analyzed <- BASTD_analyze(data = data, task = "STOP-IT")[[1]]
+    visualized <- BASTD_visualize(data = data, task = "STOP-IT") #Visualize STOP-IT data
+  }
+
+  analyzed_sst_data[[f]] <- analyzed #store the analyzed data
+  visualized_sst_data[[f]] <- visualized #store the visualized data
+}
+)
+
+#combine and then save the analyzed data
+analyzed_sst_data_combined <- do.call(rbind, analyzed_sst_data) #combine
+write.csv(analyzed_sst_data_combined, here("example-data","analyzed-data", "BASTD_analyzed_sst_data_combined.csv")) #save
+
+#save the visualized data in a single pdf file
+pdf(
+  here("example-data", "plots","BASTD_visualized_data_combined.pdf"),
+    onefile = TRUE,
+    width = 12,
+    height = 6
+    )
+
+print(visualized_sst_data)
+dev.off()
