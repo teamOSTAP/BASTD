@@ -1,5 +1,6 @@
+rm(list = ls()) #Clear
 # Below is a working example of how OSARI_analyze and OSARI_visualize are used:
-# Author contact: jasonhe93@gmail.com
+# Author contact: teamOSTAP@gmail.com
 
 #To install the retimes package, which is required for BASTD to estimate ex-gaussian parameters of response times, you will need to install 'retimes' package from the CRAN archive
 
@@ -20,22 +21,23 @@ library(here)
 
 # OSARI  ------------------------------------------------------------------
 example_OSARI_data <- "https://raw.githubusercontent.com/teamOSTAP/BASTD/main/example-data/OSARI_raw.txt" # read data in from GitHub
-OSARI_data <- read.csv(example_OSARI_data, header = TRUE, sep = "") # read the example STOP-IT data
-OSARI_analyze(data = OSARI_data)
-OSARI_analyze(data = OSARI_data)[[1]] #Subset to all variables
-OSARI_analyze(data = OSARI_data)[[2]] #Subset to just accurate go trials with omissions replaced variables
-OSARI_visualize(OSARI_data) # OSARI visualize
+# OSARI_data <- read.csv(example_OSARI_data, header = TRUE, sep = "") # read the example STOP-IT data
+OSARI_data <- read.csv(
+  here(
+    "example-data",
+    "OSARI_raw.txt"),
+  sep = "\t"
+)
 
-# Analyze all examples ----------------------------------------------------
-# OSARI_analyzed_all creates a folder called 'analyzed' in the specified working directory
-# OSARI_visualized creates a folder called 'visualized' in the specified working directory
-# These scripts work by looking for all the files in that folder with the term 'OSARI' and then analyze or visualize those data
-OSARI_analyze_all(here("example-data")) # analyzed data will be saved as a .csv file
-OSARI_visualize_all(here("example-data")) # visualized data will be saved as a .pdf file
+BASTD_analyze(data = OSARI_data, task = "OSARI")[[1]] #Subset to all variables
+BASTD_analyze(data = OSARI_data, task = "OSARI")[[2]] #Subset to just accurate go trials with omissions replaced variables
+BASTD_visualize(data = OSARI_data, task = "OSARI") #Visualise STOP-IT data
 
 # STOP-IT -----------------------------------------------------------------
-# BASTD can also be used for traditional choice reaction stop signal task performance:
+# BASTD's analyze function can also be used for traditional choice reaction stop signal task performance:
 example_STOP_IT_data <- "https://raw.githubusercontent.com/teamOSTAP/BASTD/main/example-data/STOP-IT_raw.csv"
 STOP_IT_data <- read.csv(example_STOP_IT_data, header = TRUE) # read the example STOP-IT data
-STOPIT_analyze(data = STOP_IT_data) # STOPIT_analyze
 
+BASTD_analyze(data = STOP_IT_data, task = "STOP-IT")[[1]] #Subset to all variables
+BASTD_analyze(data = STOP_IT_data, task = "STOP-IT")[[2]] #Subset to just accurate go trials with omissions replaced variables
+BASTD_visualize(data = STOP_IT_data, task = "STOP-IT") #Visualize STOP-IT data

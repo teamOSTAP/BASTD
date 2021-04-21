@@ -1,88 +1,108 @@
-#' OSARI_visualize
+#' BASTD_visualize
 #'
-#' Analyze OSARI performance data for a single participant
+#' Visualizes stop-signal performance data for a single participant
 #'
-#' @param dataframe refers to a dataframe containing participant's performance
+#' @param dataframe stop-signal performance data
 #'
-#' @return BASTD_analyze will return a dataframe with a single row, containing the performance metrics for all the protocols completed by a given participant.
+#' @return returns a plot of a participant's performance on the stop-signal task
 #'
 #' @examples
-#'example_OSARI_data <- "https://raw.githubusercontent.com/HeJasonL/BASTD/master/example-data/OSARI_raw_OSARI_2020_Aug_25_1336.txt"
-#'OSARI_data <- read.csv(example_OSARI_data, header = TRUE, sep = "\t")
-#'OSARI_visualize(OSARI_data) #OSARI visualize
+#'
+#'example_OSARI_data <- "https://raw.githubusercontent.com/teamOSTAP/BASTD/main/example-data/OSARI_raw.txt" # read data in from GitHub
+#' OSARI_data <- read.csv(example_OSARI_data, header = TRUE, sep = "") # read the example STOP-IT data
+#' OSARI_data <- read.csv(
+#'   here(
+#'     "example-data",
+#'     "OSARI_raw.txt"),
+#'   sep = "\t"
+#' )
+#'
+#'BASTD_visualize(data = OSARI_data, task = "OSARI") #Visualise STOP-IT data
 #'
 #' @export
 
-OSARI_visualize <- function(data){
-  #debugging ---------------------------------------------------------------
-  # example_OSARI_data <- "https://raw.githubusercontent.com/HeJasonL/BASTD/master/example-data/OSARI_raw.txt"
-  # data <- read.csv(example_OSARI_data, header = TRUE, sep = "")
-  # osari_data <- OSARI_data #OSARI_data
+BASTD_visualize <- function(data, task){
 
-  # setup -------------------------------------------------------------------
-  osari_data <- data #OSARI_data
-
-  # Convert the readout to universal columns names and values ---------------
-  ID <- "Example Participant"
-  Block <- osari_data$block  #adding these two columns will give you Block
-  Trial <- osari_data$trial
-  TrialType <- osari_data$trialType
-  Stimulus <- NA
-  Signal <- osari_data$signal
-  Correct <- ifelse(osari_data$signal==1 & osari_data$response == 1, 0, 2)
-  Response <- osari_data$response
-  RT <- osari_data$rt * 1000
-  RE <- NA
-  SSD <- osari_data$ssd * 1000
-
-
-  converted_osari_data <- as.data.frame(cbind(ID, Block, Trial, Stimulus, Signal, Correct, Response, RT, RE, SSD, TrialType)) #create the dataframe used for BASTD_analyze
-  converted_osari_data$trial_number <- 1:nrow(converted_osari_data)
-  block_end <- list()
-
-
-  unique_blockTypes <- unique(converted_osari_data$TrialType)
-
+#Convert the OSARI data and identify block ends
+if(task == "OSARI"){
   #OSARI's block column is the repetition of that block for the given trial type (or block type), rather than a continuous running value
-  #The code below turns it into a continuing running value
+  #The code below turns it into a continuous running value
+  converted_data <- OSARI_convert(data)
+  converted_data$trial_number <- 1:nrow(converted_data) #add a trial_number column
+
+  block_end <- list()
+  unique_blockTypes <- unique(converted_data$TrialType)
   continuous_blocks <- list()
   for(t in 1:length(unique_blockTypes)){
-    current_block_type <- converted_osari_data[converted_osari_data$TrialType == unique_blockTypes[t],]
+    current_block_type <- converted_data[converted_data$TrialType == unique_blockTypes[t],]
     continuous_blocks[[t]] <- rep(t, nrow(current_block_type))
   }
 
-  converted_osari_data$Block <- unlist(continuous_blocks) + as.numeric(converted_osari_data$Block)
+  converted_data$Block <- unlist(continuous_blocks) + as.numeric(converted_data$Block)
 
+  #block_end is used to identify the row number corresponding to the end of each block
+  #this is used to draw the vertical dotted lines for panel b and e of the figure
   block_end <- list()
-  for(b in 1:length(unique(converted_osari_data$Block))){
-    current_block <- converted_osari_data[converted_osari_data$Block==b,]
-    block_end[b] <- as.numeric(as.character(current_block$trial_number[nrow(current_block)]))
+
+  for(b in 1:length(unique(converted_data$Block))){
+
+  current_block <- converted_data[converted_data$Block==b,]
+  block_end[b] <- as.numeric(as.character(current_block$trial_number[nrow(current_block)]))
+
   }
 
-# analyze osari_data ------------------------------------------------------
-  analyzed_osari_data <- suppressWarnings(BASTD_analyze(converted_osari_data, 1000)[[1]])
+  #analyze the osari data
+  analyzed_data <- suppressWarnings(BASTD_analyze(data = data, task = "OSARI")[[1]])
+
+}
+
+#Convert the STOP-IT and identify block ends
+if(task == "STOP-IT"){
+  converted_data <- STOPIT_convert(data)
+  converted_data$trial_number <- 1:nrow(converted_data) #add a trial_number column
+
+  #block_end is used to identify the row number corresponding to the end of each block
+  #this is used to draw the vertical dotted lines for panel b and e of the figure
+  block_end <- list()
+
+  for(b in 1:length(unique(converted_data$Block))){
+  current_block <- converted_data[converted_data$Block==b - 1,]
+  block_end[b] <- as.numeric(as.character(current_block$trial_number[nrow(current_block)]))
+
+  }
+
+  #analyze the osari data
+  analyzed_data <- suppressWarnings(BASTD_analyze(data = data, task = "STOP-IT")[[1]])
+
+}
+
+
+
+
+
+
 
   #The Procedure
-  number_of_blocks <- analyzed_osari_data$number_of_blocks
-  number_of_go_per_block <- analyzed_osari_data$number_of_go_trials_per_block
-  number_of_stop_per_block <- analyzed_osari_data$number_of_stop_trials_per_block
+  number_of_blocks <- analyzed_data$number_of_blocks
+  number_of_go_per_block <- analyzed_data$number_of_go_trials_per_block
+  number_of_stop_per_block <- analyzed_data$number_of_stop_trials_per_block
 
   the_procedure <- cbind(number_of_blocks, number_of_go_per_block, number_of_stop_per_block)
 
   #Convert all relevant columns to numeric first
-  analyzed_osari_data[2:ncol(analyzed_osari_data)] <- lapply(analyzed_osari_data[2:ncol(analyzed_osari_data)], as.numeric)
+  analyzed_data[2:ncol(analyzed_data)] <- lapply(analyzed_data[2:ncol(analyzed_data)], as.numeric)
 
   #Descriptive statistics
-  go_omissions <- analyzed_osari_data$omission_error
-  go_accuracy <- analyzed_osari_data$go_trial_accuracy
-  mean_go_RT <- round(analyzed_osari_data$go_trial_RT_mean_omissions_replaced,2)
-  sd_go_RT <- ifelse(is.null(analyzed_osari_data$go_trial_RT_sd_omissions_replaced), NA, round(analyzed_osari_data$go_trial_RT_sd_omissions_replaced,2))
-  mean_SSD <- ifelse(is.null(analyzed_osari_data$mean_presp), NA, round(1000 * analyzed_osari_data$mean_presp,2))
-  SSRT <- ifelse(is.null(analyzed_osari_data$correct_go_SSRT_omissions_replaced_integration_method), NA, round(analyzed_osari_data$correct_go_SSRT_omissions_replaced_integration_method,2))
-  mean_failed_stop_RT <- ifelse(is.null(analyzed_osari_data$failed_stop_RT_mean),  NA, round(analyzed_osari_data$failed_stop_RT_mean,2))
-  sd_failed_stop_RT <- ifelse(is.null(analyzed_osari_data$failed_stop_RT_sd), NA, round(analyzed_osari_data$failed_stop_RT_sd,2))
+  go_omissions <- analyzed_data$omission_error
+  go_accuracy <- round(analyzed_data$go_trial_accuracy,2)
+  mean_go_RT <- round(analyzed_data$go_trial_RT_mean_omissions_replaced,2)
+  sd_go_RT <- ifelse(is.null(analyzed_data$go_trial_RT_sd_omissions_replaced), NA, round(analyzed_data$go_trial_RT_sd_omissions_replaced,2))
+  mean_SSD <- ifelse(is.null(analyzed_data$mean_presp), NA, round(1000 * analyzed_data$mean_presp,2))
+  SSRT <- ifelse(is.null(analyzed_data$accurate_go_SSRT_omissions_replaced_integration_method), NA, round(analyzed_data$accurate_go_SSRT_omissions_replaced_integration_method,2))
+  mean_failed_stop_RT <- ifelse(is.null(analyzed_data$failed_stop_RT_mean),  NA, round(analyzed_data$failed_stop_RT_mean,2))
+  sd_failed_stop_RT <- ifelse(is.null(analyzed_data$failed_stop_RT_sd), NA, round(analyzed_data$failed_stop_RT_sd,2))
 
-  plotting_data <- converted_osari_data #subset to all the Go-trials
+  plotting_data <- converted_data #subset to all the Go-trials
 
   # Fix the variable class
   plotting_data$RT <- as.numeric(as.character(plotting_data$RT))
@@ -114,7 +134,9 @@ OSARI_visualize <- function(data){
                    plot.tag = ggplot2::element_text(face = "bold"))
 
 # Panel b -----------------------------------------------------------------
-    panel_b <- ggplot2::ggplot(plotting_data, ggplot2::aes(x=Trial, y=RT, color = Correct)) +
+  plotting_data$RT[plotting_data$RT==0] <- NA
+
+    panel_b <- ggplot2::ggplot(plotting_data, ggplot2::aes(x= Trial, y= RT, color = as.factor(Correct))) +
     ggplot2::geom_point() +ggplot2::theme(legend.position="none") +
     ggplot2::geom_vline(xintercept = c(unlist(block_end)), linetype="dotted") +
     ggplot2::scale_color_manual(values = c("red", "blue")) +
@@ -128,7 +150,7 @@ OSARI_visualize <- function(data){
              legend.position="none")
 
 # Panel c -----------------------------------------------------------------
-    panel_c <- ggplot2::ggplot(plotting_data, ggplot2::aes(x=RT, color = Correct, fill = Correct)) +
+    panel_c <- ggplot2::ggplot(plotting_data, ggplot2::aes(x=RT, color = as.factor(Correct), fill = as.factor(Correct))) +
     ggplot2::geom_density(alpha = .3) +
     ggplot2::scale_color_manual(values = c("red", "blue")) +
     ggplot2::scale_fill_manual(values = c("red", "blue")) +
@@ -158,13 +180,11 @@ OSARI_visualize <- function(data){
                    axis.title = ggplot2::element_blank(),
                    plot.tag = ggplot2::element_text(face = "bold"))
 
-
-
-
 # Panel e -----------------------------------------------------------------
 stop_data <-  plotting_data[plotting_data$Signal==1,]
+plotting_data$SSD[plotting_data$SSD==0] <- NA
 
-panel_e <- ggplot2::ggplot(plotting_data, ggplot2::aes(x=Trial, y= SSD, color = Correct)) +
+panel_e <- ggplot2::ggplot(plotting_data, ggplot2::aes(x=Trial, y= SSD, color = as.factor(Correct))) +
   ggplot2::geom_point()+
   ggplot2::geom_vline(xintercept = c(unlist(block_end)), linetype="dotted") +
   ggplot2::scale_color_manual(values = c("red", "blue")) +
@@ -210,10 +230,10 @@ figures_combined <- ggpubr::ggarrange(panel_a, panel_b, panel_c,
                               nrow = 2, ncol = 3)
 
 figures_combined_with_participant_id <- ggpubr::annotate_figure(figures_combined,
-                                                        top = ggpubr::text_grob(paste("Participant ID: ",  converted_osari_data$ID[1]), size = 10))
+                                                        top = ggpubr::text_grob(paste("Participant ID: ",  converted_data$ID[1]), size = 10))
 
 figures_combined_with_participant_id_and_title <- ggpubr::annotate_figure(figures_combined_with_participant_id,
-                           top = ggpubr::text_grob("OSARI_visualize(d)",
+                           top = ggpubr::text_grob("BASTD_visualize(d)",
                                                    color = "black",
                                                    face = "bold",
                                                    size = 15))
