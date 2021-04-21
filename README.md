@@ -51,7 +51,7 @@ The function used to visualize data is:
 
 An example of visualized data using BASTD:
 
-![alt text](https://i.imgur.com/TRXcCYx.jpg)
+![alt text](https://i.imgur.com/pgp98Yi.png)
 
 ### A note on *Context Independence* violations
 When analysing the data from Anticipatory Response Inhibition (ARI) stop-signal tasks such as OSARI, we recommend users be aware of [recent updates in the modelling literature](https://psyarxiv.com/9h3v7/), in particular the relevance of Context Independance. If you have reason to suspect a violation of Context Independance in your data/selected paradigm, we recommend using the [Dynamic Models of Choice (DMC) R system](osf.io/tw46u/). Please see the manuscript for further information. 
