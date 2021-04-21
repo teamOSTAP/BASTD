@@ -25,17 +25,20 @@ BASTD_visualize <- function(data, task){
 
 #Convert the OSARI data and identify block ends
 if(task == "OSARI"){
+
   #OSARI's block column is the repetition of that block for the given trial type (or block type), rather than a continuous running value
   #The code below turns it into a continuous running value
   converted_data <- OSARI_convert(data)
   converted_data$trial_number <- 1:nrow(converted_data) #add a trial_number column
 
-  block_end <- list()
   unique_blockTypes <- unique(converted_data$TrialType)
   continuous_blocks <- list()
+
   for(t in 1:length(unique_blockTypes)){
+
     current_block_type <- converted_data[converted_data$TrialType == unique_blockTypes[t],]
     continuous_blocks[[t]] <- rep(t, nrow(current_block_type))
+
   }
 
   converted_data$Block <- unlist(continuous_blocks) + as.numeric(converted_data$Block)
@@ -58,6 +61,7 @@ if(task == "OSARI"){
 
 #Convert the STOP-IT and identify block ends
 if(task == "STOP-IT"){
+
   converted_data <- STOPIT_convert(data)
   converted_data$trial_number <- 1:nrow(converted_data) #add a trial_number column
 
@@ -75,12 +79,6 @@ if(task == "STOP-IT"){
   analyzed_data <- suppressWarnings(BASTD_analyze(data = data, task = "STOP-IT")[[1]])
 
 }
-
-
-
-
-
-
 
   #The Procedure
   number_of_blocks <- analyzed_data$number_of_blocks
