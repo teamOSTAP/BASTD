@@ -2,7 +2,7 @@ rm(list = ls()) #Clear
 # Below is a working example of how BASTD_analyze and BASTD_visualize are used:
 # Author contact: teamOSTAP@gmail.com
 
-#To install the retimes package, which is required for BASTD to estimate ex-gaussian parameters of response times, you will need to install 'retimes' package from the CRAN archive
+#To install the retimes package, which is required for BASTD to estimate ex-Gaussian parameters of response times, you will need to install 'retimes' package from the CRAN archive
 
 #If you are using a Mac:
 #retimes will require you to have Xcode (see: https://stackoverflow.com/questions/24194409/how-do-i-install-a-package-that-has-been-archived-from-cran)
@@ -11,7 +11,7 @@ rm(list = ls()) #Clear
 
 #If you are using Windows:
 #see (https://ohdsi.github.io/Hades/rSetup.html) for information about installation
-# library(retimes) #initialise retimes
+# library(retimes) #initialize retimes
 
 # Setup -------------------------------------------------------------------
 # install the latest version of the package -------------------------------

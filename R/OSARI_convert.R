@@ -15,6 +15,11 @@ OSARI_convert <- function(data){
 
   osari_data <- data
 
+  #Standardize the 'correct' column to make all incorrect responses 0 and all correct responses 2
+  osari_data$correct[osari_data$correct=="1"] <- "2"
+  osari_data$correct[osari_data$correct=="0"] <- "0"
+  osari_data$correct[osari_data$correct=="-1"] <- "0"
+
   # Convert the columns of data to the universal columns names used by BASTD_analyze and OSARI_visualize
   ID <- osari_data$id
   Block <- osari_data$block
