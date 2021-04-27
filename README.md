@@ -21,7 +21,7 @@ The functions of BASTD can be separated into those which analyze and those which
 ## Analyze function
 The functions used to analyze data is:
   * `BASTD_analyze()`
-  * 
+  
 ### BASTD_analyze
 BASTD expects recorded stop-signal data as a txt input with the column headers: ID, Block, Trial, Stimulus, Signal, Response, Correct, RT, RE, SSD, TrialType. Although originally generated for [OSARI](https://github.com/teamOSTAP/OSARI), it can be used with data output from any stop-signal task so long as data are formated in this way (data output from OSARI is formatted using `OSARI_analyze`).
 
@@ -47,7 +47,6 @@ Converts data from STOP-IT to be compatible with BASTD_analyze. Returns converte
 ## Visualize functions
 The function used to visualize data is: 
   * `BASTD_visualize()`
-
 
 An example of visualized data using BASTD:
 
