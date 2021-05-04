@@ -21,7 +21,7 @@ The functions of BASTD can be separated into those which analyze and those which
 ## Analyze function
 The functions used to analyze data is:
   * `BASTD_analyze()`
-  * 
+  
 ### BASTD_analyze
 BASTD expects recorded stop-signal data as a txt input with the column headers: ID, Block, Trial, Stimulus, Signal, Response, Correct, RT, RE, SSD, TrialType. Although originally generated for [OSARI](https://github.com/teamOSTAP/OSARI), it can be used with data output from any stop-signal task so long as data are formated in this way (data output from OSARI is formatted using `OSARI_analyze`).
 
@@ -48,7 +48,6 @@ Converts data from STOP-IT to be compatible with BASTD_analyze. Returns converte
 The function used to visualize data is: 
   * `BASTD_visualize()`
 
-
 An example of visualized data using BASTD:
 
 ![alt text](https://i.imgur.com/pgp98Yi.png)
@@ -56,4 +55,4 @@ An example of visualized data using BASTD:
 ### A note on *Context Independence* violations
 When analysing the data from Anticipatory Response Inhibition (ARI) stop-signal tasks such as OSARI, we recommend users be aware of [recent updates in the modelling literature](https://psyarxiv.com/9h3v7/), in particular the relevance of Context Independance. If you have reason to suspect a violation of Context Independance in your data/selected paradigm, we recommend using the [Dynamic Models of Choice (DMC) R system](osf.io/tw46u/). Please see the manuscript for further information. 
 
-## Thanks for using BASTD
+## Thanks for using BASTD!!
