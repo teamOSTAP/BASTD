@@ -52,6 +52,7 @@ if(task == "STOP-IT"){
 }
 
 # Standardize naming ------------------------------------------------------
+names(data)[names(data) == "id"] <- "ID"
 names(data)[names(data) == "block"] <- "Block"
 names(data)[names(data) == "trial"] <- "Trial"
 names(data)[names(data) == "stimulus"] <- "Stimulus"
@@ -226,9 +227,7 @@ if(length(
 }
 
 #Inaccurate Go trial RT
-inaccurate_go_trial_RTs <- as.numeric(as.character(all_go_trials$RT[all_go_trials$Response!=0 &
-                                                                      all_go_trials$Correct==0]))
-
+inaccurate_go_trial_RTs <- as.numeric(as.character(all_go_trials$RT[all_go_trials$Response!=0 & all_go_trials$Correct==0]))
 inaccurate_go_trial_RTs <- inaccurate_go_trial_RTs[!is.na(inaccurate_go_trial_RTs)]
 
 if(length(inaccurate_go_trial_RTs) > 1){
@@ -330,8 +329,8 @@ all_outcomes <- as.data.frame(cbind(
 row.names(all_outcomes) <- c() #clear the row name
 
 #change values to numeric and round to two decimal places
-all_outcomes[7:40] <- lapply(all_outcomes[7:40], as.numeric)
-all_outcomes[7:40] <- lapply(all_outcomes[7:40], round, 2)
+all_outcomes[4:39] <- lapply(all_outcomes[4:39], as.numeric)
+all_outcomes[4:39] <- lapply(all_outcomes[4:39], round, 2)
 
 standard_cols <- c(
   "id_number",
